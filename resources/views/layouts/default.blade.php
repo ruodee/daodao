@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>@yield('title','论坛') - daodaoBBS</title>
-    <link rel="stylesheet" href="">
-</head>
-<body>
+  <head>
+    <title>@yield('title', 'DaoDao') -道道</title>
+    <link rel="stylesheet" href="/css/app.css">
+  </head>
+  <body>
+    @include('layouts._header')
+
+    <div class="container">
+      <div class="col-md-offset-1 col-md-10">
         @yield('content')
-</body>
+        @include('layouts._footer')
+      </div>
+    </div>
+  </body>
 </html>
