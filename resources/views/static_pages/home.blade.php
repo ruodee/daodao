@@ -9,7 +9,7 @@
         一切，将从这里开始。
     </p>
     <p>
-        <a href="{{ route('signup') }}" class="btn btn-lg btn-success" role="button">立即注册</a>
+        <a href="{{ route('users.create') }}" class="btn btn-lg btn-success" role="button">立即注册</a>
     </p>
 </div>
 @stop

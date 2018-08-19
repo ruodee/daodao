@@ -11,11 +11,17 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 Route::get('/','StaticPagesController@home')->name('home');
 Route::get('/help','StaticPagesController@help')->name('help');
 Route::get('/about','StaticPagesController@about')->name('about');
 
-Route::get('sigup','UsersController@create')->name('signup');
+//Route::get('signup','UsersController@create')->name('signup');
+//Route::resource('users','UsersController');
+
+Route::get('/users','UsersController@index')->name('users.index');
+Route::get('/users/{user}','UsersController@show')->name('users.show');
+Route::get('/users/creat',function(){return "test";})->name('users.create');
+Route::post('/users','UsersController@store')->name('users.store');
+Route::get('/users/{user}/edit','UsersController@edit')->name('users.edit');
+Route::patch('/users/{user}','UsersController@update')->name('users.update');
+Route::delete('/users/{user}','UsersController@destroy')->name('users.destroy');
