@@ -19,6 +19,9 @@
                        <label for="password">密码：</label>
                        <input type="text" class="form-control" name="password" value="{{ old('password') }}">
                     </div>
+                    <div class="checkbox">
+                         <label><input type="checkbox" name="remember"> 记住我</label>
+                    </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary">提交</button>
                     </div>
