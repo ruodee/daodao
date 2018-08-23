@@ -8,6 +8,12 @@ use App\Models\User;
 
 class UsersController extends Controller
 {
+
+
+    public function __construct()
+    {
+        $this->middleware('auth',['except' => ['show','create','store']]);
+    }
     //
     public function create()
     {
@@ -50,7 +56,7 @@ class UsersController extends Controller
     public function update(User $user,Request $request)
     {
         $this->validate($request,[
-            'name' => 'required|max:50',
+            'name' => 'required|max:50|unique:users',
             'password' => 'nullable|confirm|min:6'
         ]);
         $data = [];
@@ -59,7 +65,7 @@ class UsersController extends Controller
             $data['password'] = bcrypt($request->password);
         $user->update($data);
 
-        session()->flash('sucess','个人资料更新成功！');
+        session()->flash('success','个人资料更新成功！');
         return redirect()->route('users.show',$user->id);
 
     }

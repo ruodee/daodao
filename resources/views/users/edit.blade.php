@@ -9,7 +9,7 @@
     </div>
       <div class="panel-body">
 
-        @include('shared._errors')
+        @include('shared._error')
 
         <div class="gravatar_edit">
           <a href="http://gravatar.com/emails" target="_blank">
