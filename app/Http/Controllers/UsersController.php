@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Models\User;
+use Mail;
+use Auth;
 
 class UsersController extends Controller
 {
@@ -12,7 +14,7 @@ class UsersController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth',['except' => ['show','create','store','index']]);
+        $this->middleware('auth',['except' => ['show','create','store','index','confirmEmail']]);
         $this->middleware('guest',['only' => ['create']]);
     }
     //
@@ -44,11 +46,25 @@ class UsersController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);
-
-        session()->flash('success','欢迎，注册成功了，您将在这里扬帆起航！');
-        return redirect()->route('users.show',[$user]);
+        $this->sendEmailConfirmationTo($user);
+        session()->flash('success','验证邮件已发送到你注册的邮箱，请查收邮件进行验证！');
+        return redirect('/');
     }
 
+    //发送验证信息邮件
+    protected function sendEmailConfirmationTo(User $user)
+    {
+        $view = 'emails.confirm';
+        $data = compact('user');
+        $from = 'aufree@yousails.com';
+        $name = 'Aufree';
+        $to = $user->email;
+        $subject = "感谢注册daodao,请点击验证链接进行邮箱验证！";
+
+        Mail::send($view,$data,function($message) use ($from,$name,$to,$subject){
+            $message->from($from,$name)->to($to)->subject($subject);
+        });
+    }
     public function edit(User $user)
     {
         $this->authorize('update',$user);
@@ -87,5 +103,18 @@ class UsersController extends Controller
         $user->delete();
         session()->flash('success','成功删除用户');
         return back();
+    }
+    //验证邮箱
+    public function confirmEmail($token)
+    {
+        $user = User::where('activation_token',$token)->firstOrFail();
+
+        $user->activated = true;
+        $user->activation_token = null;
+        $user->save();
+
+        Auth::login($user);
+        session()->flash('success','激活成功，请开始在此扬帆起航');
+        return redirect()->route('users.show',[$user]);
     }
 }

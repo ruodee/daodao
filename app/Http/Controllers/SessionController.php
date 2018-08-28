@@ -31,8 +31,18 @@ class SessionController extends Controller
 
         if(Auth::attempt($credentials,$request->has('remember')))
             {
-                session()->flash('success','登陆成功，欢迎回来！');
-                return redirect()->intended(route('users.show',[Auth::id()]));
+                if(Auth::user()->activated)
+                {
+                    session()->flash('success','登陆成功，欢迎回来！');
+                    return redirect()->intended(route('users.show',[Auth::id()]));
+                }
+                else
+                {
+                    session()->flash('danger','账号尚未验证，请登录:'.Auth::user()->email.'邮箱进行验证。');
+                    Auth::logout();
+                    return redirect('/');
+                }
+
             }
             else
             {
