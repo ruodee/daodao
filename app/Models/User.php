@@ -27,6 +27,11 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    //一个用户有多个微博
+    public function statuses()
+    {
+        return $this->hasMany(Status::class);
+    }
     //实现用户模型检测
     public static function boot()
     {
