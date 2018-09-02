@@ -53,4 +53,12 @@ class User extends Authenticatable
     {
         $this->notify(new ResetPassword($token));
     }
+
+        //动态流，取出用户发布过的statuses和用户关注的人发布的statuses
+    public function feed()
+    {
+        //step one ,先学习取出用户发布过的动态的方法
+
+        return $this->statuses()->orderBy('created_at','desc');
+    }
 }
